@@ -10,6 +10,8 @@ var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures 
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
 const Sculpture = require('./models/sculptures'); // Import the Sculpture model
+const resourceRouter = require('./routes/resource')
+
 
 var app = express();
 
