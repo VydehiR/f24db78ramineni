@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var api_controller = require('../controllers/api');
-var Sculptures_controller = require('../controllers/Sculptures');
+var Sculptures_controller = require('../controllers/sculpture');
 
 // API Route
 router.get('/', api_controller.api);
