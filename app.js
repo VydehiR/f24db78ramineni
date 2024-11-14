@@ -6,11 +6,10 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var sculpturesRouter = require('./routes/Sculptures'); // Import the Sculptures router
+var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures router
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
-const Costume = require('./models/sculptures');
-const { default: mongoose } = require('mongoose');
+const Sculpture = require('./models/sculptures'); // Import the Sculpture model
 
 var app = express();
 
@@ -28,7 +27,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/sculptures', sculpturesRouter); // Add the route for Sculptures
 app.use('/grid', gridRouter);
-app.use('/pick',pickRouter );
+app.use('/pick', pickRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -45,6 +44,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 require('dotenv').config();
 const mongoose = require('mongoose');
 const connectionString = process.env.MONGO_CON;
@@ -56,6 +56,5 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connection to DB succeeded');
 });
-
 
 module.exports = app;
