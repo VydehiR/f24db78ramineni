@@ -3,7 +3,7 @@ var router = express.Router();
 
 // Import controllers
 var api_controller = require('../controllers/api');
-var Sculptures_controller = require('../controllers/sculpture');
+var Sculptures_controller = require('../controllers/Sculptures');
 
 // API Route
 router.get('/', api_controller.api);
