@@ -10,7 +10,7 @@ var sculpturesRouter = require('./routes/Sculptures'); // Import the Sculptures 
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
 const Costume = require('./models/sculptures');
-
+const { default: mongoose } = require('mongoose');
 
 var app = express();
 
@@ -45,5 +45,17 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+require('dotenv').config();
+const mongoose = require('mongoose');
+const connectionString = process.env.MONGO_CON;
+
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connection to DB succeeded');
+});
+
 
 module.exports = app;
