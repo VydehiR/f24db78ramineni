@@ -46,6 +46,23 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+let reseed =  true;
+if(reseed){
+  async function recreateDB(){
+    await Artifact.deleteMany();
+
+    const instance1 = new Artifact({Sculptures_name: "The Thinker", Sculptures_height: "182", Sculptures_material: "Bronze" });
+    const instance2 = new Artifact({Sculptures_name: "Venus de Milo", Sculptures_height: "203", Sculptures_material: "Marble" });
+    const instance3 = new Artifact ({Sculptures_name: "David", Sculptures_height: "517", Sculptures_material: "Marble" });
+
+    await instance1.save();
+    await instance2.save();
+    await instance3.save();
+
+    console.log("Database seeded with artifacts");
+
+  }
+}
 
 // Setup MongoDB connection using the connection string from the environment variables
 require('dotenv').config();
