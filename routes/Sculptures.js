@@ -10,10 +10,8 @@ const results = [
 
 // Route to render the Sculptures page
 router.get('/', (req, res) => {
-  res.render('Sculptures', { 
-    title: 'Sculptures search results', 
-    results: results  
-  });
+  res.render('Sculptures', { title: 'Sculptures search results', results: sculptures });
+
 });
 
 module.exports = router;
