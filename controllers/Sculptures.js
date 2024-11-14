@@ -1,8 +1,8 @@
 // controllers/Sculptures.js
-const Gadget = require('../Sculptures');
+const Sculpture = require('../sculptures');
 
 // List all Sculptures
-exports.gadget_list = async (req, res) => {
+exports.Sculpture_list = async (req, res) => {
   try {
     const Sculptures = await Sculptures.find();
     res.status(200).json(Sculptures);
@@ -13,7 +13,7 @@ exports.gadget_list = async (req, res) => {
 
 // Get a specific Sculptures by ID
 exports.Sculptures_detail = function(req, res) {
-  Gadget.findById(req.params.id, function(err, Sculptures) {
+    sculptures.findById(req.params.id, function(err, Sculptures) {
     if (err || !Sculptures) return res.status(404).json({ message: "Sculpture not found" });
     res.status(200).json(Sculptures);
   });
