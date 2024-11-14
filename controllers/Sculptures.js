@@ -1,8 +1,14 @@
 var Sculpture = require('../models/sculptures');
 
 // List of all Sculptures
-exports.Sculptures_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: Sculpture list');
+exports.Sculptures_list = async function(req, res) {
+    try {
+        const sculptures = await Sculpture.find();
+        res.send(sculptures);
+    } catch (err) {
+        res.status(500);
+        res.send(`{"error": ${err}}`);
+    }
 };
 
 // For a specific Sculpture
