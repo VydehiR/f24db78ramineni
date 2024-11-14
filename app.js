@@ -9,9 +9,7 @@ var usersRouter = require('./routes/users');
 var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures router
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
-const Sculpture = require('./models/sculptures'); // Import the Sculpture model
-const resourceRouter = require('./routes/resource')
-
+const resourceRouter = require('./routes/resource'); // Import the resource router
 
 var app = express();
 
@@ -30,6 +28,7 @@ app.use('/users', usersRouter);
 app.use('/sculptures', sculpturesRouter); // Add the route for Sculptures
 app.use('/grid', gridRouter);
 app.use('/pick', pickRouter);
+app.use('/resource', resourceRouter); // Associate /resource endpoint with resourceRouter
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -38,11 +37,9 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
@@ -51,7 +48,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const connectionString = process.env.MONGO_CON;
 
-mongoose.connect(process.env.MONGO_CON);
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
