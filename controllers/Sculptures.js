@@ -1,36 +1,36 @@
-var Sculpture = require('../models/sculptures');
+const Sculpture = require('../models/sculptures');
 
 // List of all Sculptures
 exports.Sculptures_list = async function(req, res) {
   try {
     console.log("Fetching all sculptures...");
-    const sculptures = await Sculpture.find();  // .find() retrieves all documents in the sculptures collection
+    const sculptures = await Sculpture.find();
     console.log("Fetched sculptures:", sculptures);
-    res.json(sculptures);  // Send the list of sculptures as a JSON response
+    res.json(sculptures);
   } catch (err) {
     console.error("Error fetching sculptures:", err);
-    res.status(500).json({ error: err.message });  // Handle any errors
+    res.status(500).json({ error: err.message });
   }
 };
 
-// For a specific Sculpture
+// Get a specific Sculpture by ID
 exports.Sculptures_detail = async function(req, res) {
   try {
     console.log("Fetching sculpture with ID:", req.params.id);
-    const sculpture = await Sculpture.findById(req.params.id); // Find a sculpture by its ID
+    const sculpture = await Sculpture.findById(req.params.id);
     if (!sculpture) {
       console.log("Sculpture not found with ID:", req.params.id);
-      return res.status(404).json({ message: 'Sculpture not found' });  // If sculpture is not found
+      return res.status(404).json({ message: 'Sculpture not found' });
     }
     console.log("Fetched sculpture:", sculpture);
-    res.json(sculpture);  // Send the sculpture data as JSON
+    res.json(sculpture);
   } catch (err) {
     console.error("Error fetching sculpture:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
-// Handle Sculpture create on POST
+// Create a new Sculpture
 exports.Sculptures_create_post = async function(req, res) {
   try {
     console.log("Creating a new sculpture with data:", req.body);
@@ -40,33 +40,33 @@ exports.Sculptures_create_post = async function(req, res) {
       cost: req.body.cost
     });
 
-    const newSculpture = await sculpture.save();  // Save the sculpture to the database
+    const newSculpture = await sculpture.save();
     console.log("Created new sculpture:", newSculpture);
-    res.status(201).json(newSculpture);  // Return the created sculpture with a status code of 201
+    res.status(201).json(newSculpture);
   } catch (err) {
     console.error("Error creating sculpture:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
-  // Handle Sculpture delete on DELETE
+// Delete a Sculpture by ID
 exports.Sculptures_delete = async function(req, res) {
   try {
     console.log("Deleting sculpture with ID:", req.params.id);
-    const sculpture = await Sculpture.findByIdAndDelete(req.params.id);  // Delete the sculpture by its ID
+    const sculpture = await Sculpture.findByIdAndDelete(req.params.id);
     if (!sculpture) {
       console.log("Sculpture not found with ID:", req.params.id);
       return res.status(404).json({ message: 'Sculpture not found' });
     }
     console.log("Deleted sculpture:", sculpture);
-    res.status(200).json({ message: 'Sculpture deleted successfully' });  // Return success message
+    res.status(200).json({ message: 'Sculpture deleted successfully' });
   } catch (err) {
     console.error("Error deleting sculpture:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
-// Handle Sculpture update on PUT
+// Update a Sculpture by ID
 exports.Sculptures_update_put = async function(req, res) {
   try {
     console.log("Updating sculpture with ID:", req.params.id);
@@ -77,7 +77,7 @@ exports.Sculptures_update_put = async function(req, res) {
         size: req.body.size,
         cost: req.body.cost
       },
-      { new: true } // Return the updated sculpture
+      { new: true }
     );
 
     if (!sculpture) {
@@ -85,7 +85,7 @@ exports.Sculptures_update_put = async function(req, res) {
       return res.status(404).json({ message: 'Sculpture not found' });
     }
     console.log("Updated sculpture:", sculpture);
-    res.json(sculpture);  // Return the updated sculpture as JSON
+    res.json(sculpture);
   } catch (err) {
     console.error("Error updating sculpture:", err);
     res.status(500).json({ error: err.message });
