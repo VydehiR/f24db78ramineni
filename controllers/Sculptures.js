@@ -49,7 +49,13 @@ exports.Sculptures_create_post = async function(req, res) {
   }
 };
 
-// Handle Sculpture delete on DELETE
+const results = [
+    { Sculptures_name: "The Thinker", Sculptures_height: "182", Sculptures_material: "Bronze" },
+    { Sculptures_name: "Venus de Milo", Sculptures_height: "203", Sculptures_material: "Marble" },
+    { Sculptures_name: "David", Sculptures_height: "517", Sculptures_material: "Marble" }
+  ];
+
+  // Handle Sculpture delete on DELETE
 exports.Sculptures_delete = async function(req, res) {
   try {
     console.log("Deleting sculpture with ID:", req.params.id);
