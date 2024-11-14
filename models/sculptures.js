@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const costumeSchema = mongoose.Schema({
-  costume_type: String,
+const SculpturesSchema = mongoose.Schema({
+  sculpture_type: String,
   size: String,
   cost: Number
 });
 
-module.exports = mongoose.model('sculptures', sculpturesSchema);
+module.exports = mongoose.model('sculptures', SculpturesSchema);
