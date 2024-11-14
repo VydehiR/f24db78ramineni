@@ -49,7 +49,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const connectionString = process.env.MONGO_CON;
 
-mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_CON);
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
