@@ -3,7 +3,6 @@ var Sculpture = require('../models/sculptures');
 // List of all Sculptures
 exports.Sculptures_list = async function(req, res) {
   try {
-    // Fetch all sculptures from the database
     console.log("Fetching all sculptures...");
     const sculptures = await Sculpture.find();  // .find() retrieves all documents in the sculptures collection
     console.log("Fetched sculptures:", sculptures);

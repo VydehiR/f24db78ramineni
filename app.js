@@ -10,6 +10,7 @@ var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures 
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
 const resourceRouter = require('./routes/resource'); // Import the resource router for API endpoints
+const Sculptures = require('./models/sculptures')
 
 var app = express();
 
