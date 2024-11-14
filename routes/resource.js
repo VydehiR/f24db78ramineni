@@ -8,6 +8,7 @@ var Sculptures_controller = require('../controllers/sculpture');
 router.get('/', api_controller.api);
 
 // Gadget Routes
+router.get('/path', handlerFunction);
 router.get('/Sculptures', Sculptures_controller.Sculptures_list);  // List all Sculptures
 router.post('/Sculptures', Sculptures_controller.Sculptures_create_post); // Create new Sculptures
 router.get('/Sculptures/:id', Sculptures_controller.Sculptures_detail); // View single Sculptures
