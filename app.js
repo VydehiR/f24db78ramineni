@@ -9,7 +9,7 @@ var usersRouter = require('./routes/users');
 var sculpturesRouter = require('./routes/Sculptures'); // Import the Sculptures router
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
-const Costume = require('./models/costume');
+const Costume = require('./models/sculptures');
 
 
 var app = express();
