@@ -34,15 +34,26 @@ exports.Sculptures_detail = async function(req, res) {
 exports.Sculptures_create_post = async function(req, res) {
   try {
     console.log("Creating a new sculpture with data:", req.body);
+
+    // Check if all required fields are provided
+    const { sculpture_name, Sculptures_height, Sculptures_material } = req.body;
+    if (!sculpture_name || !Sculptures_height || !Sculptures_material) {
+      return res.status(400).json({ message: "All fields are required: sculpture_name, Sculptures_height, Sculptures_material." });
+    }
+
+    // Create a new sculpture instance
     const sculpture = new Sculpture({
-      sculpture_name: req.body.sculpture_name,
-      Sculptures_height: req.body.Sculptures_height,
-      Sculptures_material: req.body.Sculptures_material
+      sculpture_name,
+      Sculptures_height,
+      Sculptures_material
     });
 
-    const newSculpture = await sculpture.save();  // Save the sculpture to the database
+    // Save the sculpture to the database
+    const newSculpture = await sculpture.save();
     console.log("Created new sculpture:", newSculpture);
-    res.status(201).json(newSculpture);  // Return the created sculpture with a status code of 201
+
+    // Return the created sculpture as a JSON response with HTTP 201 status
+    res.status(201).json(newSculpture);
   } catch (err) {
     console.error("Error creating sculpture:", err);
     res.status(500).json({ error: err.message });
