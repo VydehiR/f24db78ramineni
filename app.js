@@ -66,19 +66,37 @@ db.once('open', () => {
 let reseed = true;
 if (reseed) {
   async function recreateDB() {
-    await Sculpture.deleteMany();
+    // Clear the collection before seeding
+    await Sculpture.deleteMany();  
 
-    const instance1 = new Sculpture({ sculpture_type: "The Thinker", size: "182", cost: 1000 });
-    const instance2 = new Sculpture({ sculpture_type: "Venus de Milo", size: "203", cost: 1500 });
-    const instance3 = new Sculpture({ sculpture_type: "David", size: "517", cost: 2000 });
+    // Create new sculpture documents with the correct fields
+    const instance1 = new Sculpture({
+      sculpture_name: "The Thinker", 
+      Sculptures_height: "182", 
+      Sculptures_material: "Bronze"
+    });
+    const instance2 = new Sculpture({
+      sculpture_name: "Venus de Milo", 
+      Sculptures_height: "203", 
+      Sculptures_material: "Marble"
+    });
+    const instance3 = new Sculpture({
+      sculpture_name: "David", 
+      Sculptures_height: "517", 
+      Sculptures_material: "Marble"
+    });
 
+    // Save the instances to the database
     await instance1.save();
     await instance2.save();
     await instance3.save();
 
     console.log("Database seeded with sculptures");
   }
+
+  // Run the seed function
   recreateDB();
 }
+
 
 module.exports = app;
