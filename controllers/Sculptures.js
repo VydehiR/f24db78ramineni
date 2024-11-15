@@ -13,6 +13,15 @@ exports.Sculptures_list = async function(req, res) {
   }
 };
 
+// Render a view with a list of all sculptures
+exports.Sculptures_list_view = async function(req, res) {
+  try {
+    const sculptures = await Sculpture.find();
+    res.render('sculptures', { title: 'Sculptures Search Results', results: sculptures });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 // Get a specific Sculpture by ID
 exports.Sculptures_detail = async function(req, res) {
   try {
@@ -91,3 +100,17 @@ exports.Sculptures_update_put = async function(req, res) {
     res.status(500).json({ error: err.message });
   }
 };
+
+const Sculpture = require('../models/sculptures');
+
+// Render a view with a list of all sculptures
+exports.Sculptures_list_view = async function(req, res) {
+  try {
+    const sculptures = await Sculpture.find();
+    res.render('sculptures', { title: 'Sculptures Search Results', results: sculptures });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+

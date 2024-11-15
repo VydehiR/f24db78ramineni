@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const sculptures_controller = require('../controllers/Sculptures');
 
 // Sample data for Sculptures
 const results = [
@@ -7,7 +8,7 @@ const results = [
   { Sculptures_name: "Venus de Milo", Sculptures_height: "203", Sculptures_material: "Marble" },
   { Sculptures_name: "David", Sculptures_height: "517", Sculptures_material: "Marble" }
 ];
-
+router.get('/', sculptures_controller.Sculptures_list_view);
 // Route to render the Sculptures page
 router.get('/', (req, res) => {
   res.render('Sculptures', { title: 'Sculptures search results', results: sculptures });
@@ -15,3 +16,5 @@ router.get('/', (req, res) => {
 });
 
 module.exports = router;
+
+

@@ -10,7 +10,7 @@ var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures 
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
 const resourceRouter = require('./routes/resource'); // Import the resource router for API endpoints
-const Sculptures = require('./models/sculptures')
+const Sculpture = require('./models/sculptures'); // Import the correct Sculpture model
 
 var app = express();
 
@@ -46,23 +46,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-let reseed =  true;
-if(reseed){
-  async function recreateDB(){
-    await Artifact.deleteMany();
-
-    const instance1 = new Artifact({Sculptures_name: "The Thinker", Sculptures_height: "182", Sculptures_material: "Bronze" });
-    const instance2 = new Artifact({Sculptures_name: "Venus de Milo", Sculptures_height: "203", Sculptures_material: "Marble" });
-    const instance3 = new Artifact ({Sculptures_name: "David", Sculptures_height: "517", Sculptures_material: "Marble" });
-
-    await instance1.save();
-    await instance2.save();
-    await instance3.save();
-
-    console.log("Database seeded with artifacts");
-
-  }
-}
 
 // Setup MongoDB connection using the connection string from the environment variables
 require('dotenv').config();
@@ -78,5 +61,24 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('Connection to DB succeeded');
 });
+
+// Seed database if reseed is true
+let reseed = true;
+if (reseed) {
+  async function recreateDB() {
+    await Sculpture.deleteMany();
+
+    const instance1 = new Sculpture({ sculpture_type: "The Thinker", size: "182", cost: 1000 });
+    const instance2 = new Sculpture({ sculpture_type: "Venus de Milo", size: "203", cost: 1500 });
+    const instance3 = new Sculpture({ sculpture_type: "David", size: "517", cost: 2000 });
+
+    await instance1.save();
+    await instance2.save();
+    await instance3.save();
+
+    console.log("Database seeded with sculptures");
+  }
+  recreateDB();
+}
 
 module.exports = app;
