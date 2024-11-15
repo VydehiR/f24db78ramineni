@@ -5,16 +5,14 @@ html(lang="en")
     title Sculptures Search Results
   body
     h1 Sculptures Search Results
-    .container-fluid 
-    .row 
-
     ul
-      each sculpture in results
+      each sculpture in results  // Loop through the results passed from the controller
         li
-          strong Type:
-          |  #{sculpture.sculpture_name} |
-          strong Size:
-          |  #{sculpture.Sculptures_height} |
-          strong Cost:
-          |  #{sculpture.Sculptures_material}
-    
+          strong Name: 
+          = sculpture.sculpture_name
+          | |
+          strong Height: 
+          = sculpture.Sculptures_height
+          | |
+          strong Material: 
+          = sculpture.Sculptures_material

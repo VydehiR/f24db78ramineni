@@ -4,13 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// Importing routes
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures router
+var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures router for web pages
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
 const resourceRouter = require('./routes/resource'); // Import the resource router for API endpoints
-const Sculpture = require('./models/sculptures'); // Import the correct Sculpture model
+const Sculpture = require('./models/sculptures'); // Import the Sculpture model for seeding
 
 var app = express();
 
@@ -26,28 +27,28 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Define routes
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/sculptures', sculpturesRouter); // Add route for Sculptures
-app.use('/grid', gridRouter);
-app.use('/pick', pickRouter);
-app.use('/resource', resourceRouter); // Add route for the /resource API endpoints
+app.use('/', indexRouter);  // Homepage route
+app.use('/users', usersRouter);  // Users route (API or page)
+app.use('/sculptures', sculpturesRouter);  // Sculptures route for web pages (List, Detail)
+app.use('/grid', gridRouter);  // Grid route for displaying items in a grid view
+app.use('/pick', pickRouter);  // Pick route (might be for selecting items)
+app.use('/resource', resourceRouter);  // API route for sculptures (CRUD API)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  next(createError(404));  // Forward 404 errors to the error handler
 });
 
 // error handler
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'development' ? err : {};  // Show detailed error in development mode
 
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error');  // Render error page
 });
 
-// Setup MongoDB connection using the connection string from the environment variables
+// MongoDB Connection Setup
 require('dotenv').config();
 const mongoose = require('mongoose');
 const connectionString = process.env.MONGO_CON; // Mongo connection string from .env file
@@ -62,7 +63,7 @@ db.once('open', () => {
   console.log('Connection to DB succeeded');
 });
 
-// Seed database if reseed is true
+// Seed database if 'reseed' is true
 let reseed = true;
 if (reseed) {
   async function recreateDB() {
@@ -97,6 +98,5 @@ if (reseed) {
   // Run the seed function
   recreateDB();
 }
-
 
 module.exports = app;
