@@ -101,16 +101,6 @@ exports.Sculptures_update_put = async function(req, res) {
   }
 };
 
-const Sculpture = require('../models/sculptures');
 
-// Render a view with a list of all sculptures
-exports.Sculptures_list_view = async function(req, res) {
-  try {
-    const sculptures = await Sculpture.find();
-    res.render('sculptures', { title: 'Sculptures Search Results', results: sculptures });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
 
 
