@@ -97,34 +97,40 @@ exports.Sculptures_delete = async function(req, res) {
 };
 
 // Handle Sculpture update on PUT (for API)
+// Handle Sculpture update on PUT (for API)
 exports.Sculptures_update_put = async function(req, res) {
-  try {
-    const sculptureId = req.params.id;
-    console.log("Updating sculpture with ID:", sculptureId);
-
-    // Update the sculpture with new data
-    const sculpture = await Sculpture.findByIdAndUpdate(
-      sculptureId,
-      {
-        sculpture_name: req.body.sculpture_name,
-        Sculptures_height: req.body.Sculptures_height,
-        Sculptures_material: req.body.Sculptures_material
-      },
-      { new: true }
-    );
-
-    if (!sculpture) {
-      console.log(`Sculpture with ID ${sculptureId} not found`);
-      return res.status(404).json({ message: `Sculpture with ID ${sculptureId} not found` });
+    console.log(`Updating sculpture with ID: ${req.params.id} with body: ${JSON.stringify(req.body)}`);
+    try {
+      // Find the sculpture by its ID
+      let sculpture = await Sculpture.findById(req.params.id);
+  
+      if (!sculpture) {
+        console.log(`Sculpture not found with ID: ${req.params.id}`);
+        return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
+      }
+  
+      // Update properties if they exist in the request body
+      if (req.body.sculpture_name) sculpture.sculpture_name = req.body.sculpture_name;
+      if (req.body.Sculptures_height) sculpture.Sculptures_height = req.body.Sculptures_height;
+      if (req.body.Sculptures_material) sculpture.Sculptures_material = req.body.Sculptures_material;
+  
+      // If a checkbox is included in the form, convert it to true/false
+      if (req.body.checkboxsale) {
+        sculpture.sale = true;
+      } else {
+        sculpture.sale = false;
+      }
+  
+      // Save the updated sculpture
+      let updatedSculpture = await sculpture.save();
+      console.log("Updated sculpture:", updatedSculpture);
+  
+      // Send the updated sculpture as JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.json(updatedSculpture);
+    } catch (err) {
+      console.error("Error updating sculpture:", err);
+      res.status(500).json({ error: `Error updating sculpture with ID ${req.params.id}: ${err.message}` });
     }
-
-    console.log("Updated sculpture:", sculpture);
-    
-    // Explicitly set the Content-Type header to JSON
-    res.setHeader('Content-Type', 'application/json');
-    res.json(sculpture);  // Return the updated sculpture
-  } catch (err) {
-    console.error("Error updating sculpture:", err);
-    res.status(500).json({ error: `Error updating sculpture: ${err.message}` });
-  }
-};
+  };
+  
