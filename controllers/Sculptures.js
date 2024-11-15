@@ -6,7 +6,10 @@ exports.Sculptures_list = async function(req, res) {
     console.log("Fetching all sculptures...");
     const sculptures = await Sculpture.find();  // .find() retrieves all documents in the sculptures collection
     console.log("Fetched sculptures:", sculptures);
-    res.render('sculptures', { results: sculptures });  // Send the list of sculptures to Pug view for rendering
+
+    // Explicitly set the Content-Type header to JSON
+    res.setHeader('Content-Type', 'application/json');
+    res.json(sculptures);  // Return the list of sculptures as JSON
   } catch (err) {
     console.error("Error fetching sculptures:", err);
     res.status(500).json({ error: err.message });
@@ -16,15 +19,21 @@ exports.Sculptures_list = async function(req, res) {
 // For a specific Sculpture (GET one sculpture by ID)
 exports.Sculptures_detail = async function(req, res) {
   try {
-    console.log("Fetching sculpture with ID:", req.params.id);
-    const sculpture = await Sculpture.findById(req.params.id); // Find a sculpture by its ID
+    const sculptureId = req.params.id; // Access the ID from params
+    console.log("Fetching sculpture with ID:", sculptureId);
+
+    // Fetch the sculpture by its ID
+    const sculpture = await Sculpture.findById(sculptureId); 
     
     if (!sculpture) {
-      console.log("Sculpture not found with ID:", req.params.id);
-      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
+      console.log(`Sculpture not found with ID: ${sculptureId}`);
+      return res.status(404).json({ message: `Sculpture with ID ${sculptureId} not found` });
     }
 
     console.log("Fetched sculpture:", sculpture);
+    
+    // Explicitly set the Content-Type header to JSON
+    res.setHeader('Content-Type', 'application/json');
     res.json(sculpture);  // Send the sculpture data as JSON (API response)
   } catch (err) {
     console.error("Error fetching sculpture:", err);
@@ -65,15 +74,21 @@ exports.Sculptures_create_post = async function(req, res) {
 // Handle Sculpture delete on DELETE (for API)
 exports.Sculptures_delete = async function(req, res) {
   try {
-    console.log("Deleting sculpture with ID:", req.params.id);
-    const sculpture = await Sculpture.findByIdAndDelete(req.params.id);  // Delete the sculpture by its ID
+    const sculptureId = req.params.id;
+    console.log("Deleting sculpture with ID:", sculptureId);
+    
+    // Delete the sculpture by its ID
+    const sculpture = await Sculpture.findByIdAndDelete(sculptureId);  
     
     if (!sculpture) {
-      console.log("Sculpture not found with ID:", req.params.id);
-      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
+      console.log(`Sculpture with ID ${sculptureId} not found`);
+      return res.status(404).json({ message: `Sculpture with ID ${sculptureId} not found` });
     }
 
     console.log("Deleted sculpture:", sculpture);
+    
+    // Explicitly set the Content-Type header to JSON
+    res.setHeader('Content-Type', 'application/json');
     res.status(200).json({ message: 'Sculpture deleted successfully' });
   } catch (err) {
     console.error("Error deleting sculpture:", err);
@@ -84,11 +99,12 @@ exports.Sculptures_delete = async function(req, res) {
 // Handle Sculpture update on PUT (for API)
 exports.Sculptures_update_put = async function(req, res) {
   try {
-    console.log("Updating sculpture with ID:", req.params.id);
+    const sculptureId = req.params.id;
+    console.log("Updating sculpture with ID:", sculptureId);
 
     // Update the sculpture with new data
     const sculpture = await Sculpture.findByIdAndUpdate(
-      req.params.id,
+      sculptureId,
       {
         sculpture_name: req.body.sculpture_name,
         Sculptures_height: req.body.Sculptures_height,
@@ -98,11 +114,14 @@ exports.Sculptures_update_put = async function(req, res) {
     );
 
     if (!sculpture) {
-      console.log("Sculpture not found with ID:", req.params.id);
-      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
+      console.log(`Sculpture with ID ${sculptureId} not found`);
+      return res.status(404).json({ message: `Sculpture with ID ${sculptureId} not found` });
     }
 
     console.log("Updated sculpture:", sculpture);
+    
+    // Explicitly set the Content-Type header to JSON
+    res.setHeader('Content-Type', 'application/json');
     res.json(sculpture);  // Return the updated sculpture
   } catch (err) {
     console.error("Error updating sculpture:", err);
