@@ -1,18 +1,16 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    title Sculptures Search Results
-  body
-    h1 Sculptures Search Results
-    ul
-      each sculpture in results  // Loop through the results passed from the controller
-        li
-          strong Name: 
-          = sculpture.sculpture_name
-          | |
-          strong Height: 
-          = sculpture.Sculptures_height
-          | |
-          strong Material: 
-          = sculpture.Sculptures_material
+extends layout
+
+block content
+  h1 Sculptures Search Results
+  ul
+    
+    each sculpture in results
+      li
+        strong Name:
+        = sculpture.sculpture_name
+        br
+        strong Height:
+        = sculpture.Sculptures_height
+        br
+        strong Material:
+        = sculpture.Sculptures_material
