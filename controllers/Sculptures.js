@@ -13,20 +13,22 @@ exports.Sculptures_list = async function(req, res) {
   }
 };
 
-// For a specific Sculpture (for webpage rendering)
+// For a specific Sculpture (GET one sculpture by ID)
 exports.Sculptures_detail = async function(req, res) {
   try {
     console.log("Fetching sculpture with ID:", req.params.id);
     const sculpture = await Sculpture.findById(req.params.id); // Find a sculpture by its ID
+    
     if (!sculpture) {
       console.log("Sculpture not found with ID:", req.params.id);
-      return res.status(404).json({ message: 'Sculpture not found' });
+      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
     }
+
     console.log("Fetched sculpture:", sculpture);
     res.json(sculpture);  // Send the sculpture data as JSON (API response)
   } catch (err) {
     console.error("Error fetching sculpture:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: `Error fetching sculpture with ID ${req.params.id}: ${err.message}` });
   }
 };
 
@@ -65,15 +67,17 @@ exports.Sculptures_delete = async function(req, res) {
   try {
     console.log("Deleting sculpture with ID:", req.params.id);
     const sculpture = await Sculpture.findByIdAndDelete(req.params.id);  // Delete the sculpture by its ID
+    
     if (!sculpture) {
       console.log("Sculpture not found with ID:", req.params.id);
-      return res.status(404).json({ message: 'Sculpture not found' });
+      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
     }
+
     console.log("Deleted sculpture:", sculpture);
     res.status(200).json({ message: 'Sculpture deleted successfully' });
   } catch (err) {
     console.error("Error deleting sculpture:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: `Error deleting sculpture: ${err.message}` });
   }
 };
 
@@ -81,6 +85,8 @@ exports.Sculptures_delete = async function(req, res) {
 exports.Sculptures_update_put = async function(req, res) {
   try {
     console.log("Updating sculpture with ID:", req.params.id);
+
+    // Update the sculpture with new data
     const sculpture = await Sculpture.findByIdAndUpdate(
       req.params.id,
       {
@@ -93,12 +99,13 @@ exports.Sculptures_update_put = async function(req, res) {
 
     if (!sculpture) {
       console.log("Sculpture not found with ID:", req.params.id);
-      return res.status(404).json({ message: 'Sculpture not found' });
+      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
     }
+
     console.log("Updated sculpture:", sculpture);
     res.json(sculpture);  // Return the updated sculpture
   } catch (err) {
     console.error("Error updating sculpture:", err);
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: `Error updating sculpture: ${err.message}` });
   }
 };
