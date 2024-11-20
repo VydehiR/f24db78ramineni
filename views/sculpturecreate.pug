@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1 Create a New Sculpture
+  form(action='/sculptures', method='POST')
+    div
+      label(for='sculpture_name') Sculpture Name
+      input(type='text', name='sculpture_name', required=true)
+    div
+      label(for='Sculptures_height') Sculpture Height
+      input(type='number', name='Sculptures_height', required=true)
+    div
+      label(for='Sculptures_material') Sculpture Material
+      input(type='text', name='Sculptures_material', required=true)
+    div
+      button(type='submit') Create Sculpture

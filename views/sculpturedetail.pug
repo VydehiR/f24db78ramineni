@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 Sculpture Detail
+  div
+    strong Name: 
+    = sculpture.sculpture_name
+  div
+    strong Height:
+    = sculpture.Sculptures_height
+  div
+    strong Material:
+    = sculpture.Sculptures_material
+  a(href='/sculptures') Back to List
