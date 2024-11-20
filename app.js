@@ -7,7 +7,7 @@ var logger = require('morgan');
 // Importing routes
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var sculpturesRouter = require('./routes/sculptures'); // Import the Sculptures router for web pages
+var sculpturesRouter = require('./routes/Sculptures'); // Import the Sculptures router for web pages
 var gridRouter = require('./routes/grid');
 var pickRouter = require('./routes/pick');
 const resourceRouter = require('./routes/resource'); // Import the resource router for API endpoints
