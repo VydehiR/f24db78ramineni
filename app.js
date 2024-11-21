@@ -100,7 +100,7 @@ if (reseed) {
 }
 
 // Start the server
-const port = 3002;
+const port = 3003;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
