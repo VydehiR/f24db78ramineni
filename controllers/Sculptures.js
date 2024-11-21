@@ -67,14 +67,13 @@ exports.Sculptures_update_put = async function (req, res) {
 
 // Delete a Sculpture
 exports.Sculptures_delete = async function (req, res) {
-  console.log("delete " + req.params.id)
   try {
-    result = await Kitten.findByIdAndDelete(req.params.id)
-    console.log("Removed " + result)
-    res.send(result)
+    const sculpture = await Sculpture.findByIdAndDelete(req.params.id);
+    if (!sculpture) {
+      return res.status(404).send({ message: `Sculpture with ID ${req.params.id} not found` });
+    }
+    res.json(sculpture);
   } catch (err) {
-    res.status(500)
-    res.send({
-      "error": Error `deleting ${err}`});
+    res.status(500).send({ error: `Error deleting sculpture: ${err.message}` });
   }
 };
