@@ -16,9 +16,9 @@ exports.Sculptures_list = async function (req, res) {
 // Get a specific Sculpture by ID
 exports.Sculpture_view_one_Page = async function (req, res) {
   try {
-    const sculpture = await Sculpture.findById(req.query.id);  // Fetch sculpture by ID from query params
+    const sculpture = await Sculpture.findById(req.params.id);  // Use req.params.id to get the sculpture by ID
     if (!sculpture) {
-      return res.status(404).json({ message: `Sculpture with ID ${req.query.id} not found` });
+      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
     }
     // Render the view and pass the sculpture details
     res.render('sculpturedetail', { title: 'Sculpture Detail', sculpture: sculpture });

@@ -11,7 +11,7 @@ router.get('/', sculptures_controller.Sculptures_list);
 router.post('/', sculptures_controller.Sculptures_create_post);
 
 // GET a specific sculpture by ID (detail)
-router.get('/:id', sculptures_controller.Sculptures_detail);
+router.get('/:id', sculptures_controller.Sculpture_view_one_Page);  // Updated route for sculpture detail
 
 // PUT (update) a sculpture by ID
 router.put('/:id', sculptures_controller.Sculptures_update_put);
