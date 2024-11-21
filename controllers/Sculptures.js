@@ -14,14 +14,14 @@ exports.Sculptures_list = async function (req, res) {
 };
 
 // Get a specific Sculpture by ID
-exports.Sculptures_detail = async function (req, res) {
+exports.Sculpture_view_one_Page = async function (req, res) {
   try {
-    const sculpture = await Sculpture.findById(req.params.id);
+    const sculpture = await Sculpture.findById(req.query.id);  // Fetch sculpture by ID from query params
     if (!sculpture) {
-      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
+      return res.status(404).json({ message: `Sculpture with ID ${req.query.id} not found` });
     }
-    res.setHeader('Content-Type', 'application/json');
-    res.json(sculpture);
+    // Render the view and pass the sculpture details
+    res.render('sculpturedetail', { title: 'Sculpture Detail', sculpture: sculpture });
   } catch (err) {
     res.status(500).json({ error: `Error fetching sculpture: ${err.message}` });
   }

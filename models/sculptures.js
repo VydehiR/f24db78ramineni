@@ -8,4 +8,4 @@ const SculpturesSchema = new mongoose.Schema({
 });
 
 // Export the model
-module.exports = mongoose.model('Sculpture', SculpturesSchema);  // Use 'Sculpture' as the model name
+module.exports = mongoose.model('sculptures', SculpturesSchema);
