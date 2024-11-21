@@ -23,3 +23,8 @@ div {
 strong {
   font-weight: bold;
 }
+
+.sculptureAttr {
+  background-color: aquamarine;
+  width: 120px;
+}

@@ -43,8 +43,7 @@ router.delete('/:id', sculptures_controlers.Sculptures_delete);
  
 /* GET detail costume page */
 //router.get('/detail', sculptures_controlers.Sculpture_view_one_Page);
-router.get('/detail', sculptures_controlers.Sculpture_view_one_Page);
- 
+router.get('/detail', sculptures_controlers.Sculpture_view_one_Page); 
  
 //router.get('/create', sculptures_controlers.Sculpture_create_Page);
  
