@@ -37,12 +37,12 @@ app.use('/sculptures', sculpturesRouter);
 var sculpturesRouter = require('./routes/Sculptures');
 app.use('/sculptures', sculpturesRouter);
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));  // Forward 404 errors to the error handler
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};  // Show detailed error in development mode
 
@@ -70,22 +70,22 @@ let reseed = true;
 if (reseed) {
   async function recreateDB() {
     // Clear the collection before seeding
-    await Sculpture.deleteMany();  
+    await Sculpture.deleteMany();
 
     // Create new sculpture documents with the correct fields
     const instance1 = new Sculpture({
-      sculpture_name: "The Thinker", 
-      Sculptures_height: "182", 
+      sculpture_name: "The Thinker",
+      Sculptures_height: "182",
       Sculptures_material: "Bronze"
     });
     const instance2 = new Sculpture({
-      sculpture_name: "Venus de Milo", 
-      Sculptures_height: "203", 
+      sculpture_name: "Venus de Milo",
+      Sculptures_height: "203",
       Sculptures_material: "Marble"
     });
     const instance3 = new Sculpture({
-      sculpture_name: "David", 
-      Sculptures_height: "517", 
+      sculpture_name: "David",
+      Sculptures_height: "517",
       Sculptures_material: "Marble"
     });
 
@@ -97,6 +97,11 @@ if (reseed) {
     console.log("Database seeded with sculptures");
   }
 
+  const port = 3001;
+  // Start the server
+  app.listen(port, () => {
+    console.log(`Server is running on port ${ port }`);
+  });
   // Run the seed function
   recreateDB();
 }
