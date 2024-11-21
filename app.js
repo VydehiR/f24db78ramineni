@@ -99,8 +99,8 @@ if (reseed) {
   recreateDB();
 }
 
-// Start the server
-const port = 3003;
+const port = process.env.PORT || 3000; // Use the port from .env or fallback to 3000
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
