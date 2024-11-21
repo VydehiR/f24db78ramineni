@@ -15,7 +15,7 @@ const Sculpture = require('./models/sculptures'); // Import the Sculpture model 
 
 var app = express();
 
-// view engine setup
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -27,27 +27,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Define routes
-app.use('/', indexRouter);  // Homepage route
-app.use('/users', usersRouter);  // Users route (API or page)
-app.use('/sculptures', sculpturesRouter);  // Sculptures route for web pages (List, Detail)
-app.use('/grid', gridRouter);  // Grid route for displaying items in a grid view
-app.use('/pick', pickRouter);  // Pick route (might be for selecting items)
-app.use('/resource', resourceRouter);  // API route for sculptures (CRUD API)
-app.use('/sculptures', sculpturesRouter);
-var sculpturesRouter = require('./routes/Sculptures');
-app.use('/sculptures', sculpturesRouter);
-// catch 404 and forward to error handler
+app.use('/', indexRouter); // Homepage route
+app.use('/users', usersRouter); // Users route (API or page)
+app.use('/sculptures', sculpturesRouter); // Sculptures route for web pages (List, Detail)
+app.use('/grid', gridRouter); // Grid route for displaying items in a grid view
+app.use('/pick', pickRouter); // Pick route (might be for selecting items)
+app.use('/resource', resourceRouter); // API route for sculptures (CRUD API)
+
+// Catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));  // Forward 404 errors to the error handler
+  next(createError(404)); // Forward 404 errors to the error handler
 });
 
-// error handler
+// Error handler
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};  // Show detailed error in development mode
+  res.locals.error = req.app.get('env') === 'development' ? err : {}; // Show detailed error in development mode
 
   res.status(err.status || 500);
-  res.render('error');  // Render error page
+  res.render('error'); // Render error page
 });
 
 // MongoDB Connection Setup
@@ -97,13 +95,14 @@ if (reseed) {
     console.log("Database seeded with sculptures");
   }
 
-  const port = 3000;
-  // Start the server
-  app.listen(port, () => {
-    console.log(`Server is running on port ${ port }`);
-  });
   // Run the seed function
   recreateDB();
 }
+
+// Start the server
+const port = 3001;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 module.exports = app;
