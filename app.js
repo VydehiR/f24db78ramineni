@@ -33,6 +33,7 @@ app.use('/sculptures', sculpturesRouter);  // Sculptures route for web pages (Li
 app.use('/grid', gridRouter);  // Grid route for displaying items in a grid view
 app.use('/pick', pickRouter);  // Pick route (might be for selecting items)
 app.use('/resource', resourceRouter);  // API route for sculptures (CRUD API)
+app.use('/sculptures', sculpturesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
