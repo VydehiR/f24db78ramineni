@@ -97,7 +97,7 @@ if (reseed) {
     console.log("Database seeded with sculptures");
   }
 
-  const port = 3001;
+  const port = 3000;
   // Start the server
   app.listen(port, () => {
     console.log(`Server is running on port ${ port }`);
