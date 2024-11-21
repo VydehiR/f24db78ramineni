@@ -1,14 +1,22 @@
 extends layout
-
+ 
 block content
-  h1 Sculpture Detail
-  div
-    strong Name: 
-    = sculpture.sculpture_name
-  div
-    strong Height:
-    = sculpture.Sculptures_height
-  div
-    strong Material:
-    = sculpture.Sculptures_material
-  a(href='/sculptures')
+  h1= Sculpture Detail
+    - let sculptureid   = toShow._id
+    - let sculpture_name  = toShow.sculpture_name
+    - let Sculptures_height  = toShow.Sculptures_height
+    - let Sculptures_material = toShow.Sculptures_material
+   
+    div
+        div.row
+            div(class='sculptureAttr mr-3') sculpture  ID:
+            div #{sculptureid}
+        div.row
+            div(class='sculptureAttr mr-3') sculpture name:
+            div #{sculpture_name}
+        div.row
+            div(class='sculptureAttr mr-3') sculpture height:
+            div #{Sculptures_height}
+        div.row
+            div(class='sculptureAttr mr-3') sculpture material:
+            div #{Sculptures_material}
