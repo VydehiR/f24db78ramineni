@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // Require controller modules
-var sculptures_controller = require('../controllers/sculptures');
+var sculptures_controller = require('../controllers/Sculptures');
 
 // Sculpture Routes for API
 router.get('/sculptures', sculptures_controller.Sculptures_list);          // List all Sculptures (API)
