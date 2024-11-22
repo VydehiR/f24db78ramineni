@@ -1,16 +1,19 @@
 extends layout
 
 block content
-  h1 Sculptures Search Results
-  ul
-    
-    each sculpture in results
-      li
-        strong Name:
-        = sculpture.sculpture_name
-        br
-        strong Height:
-        = sculpture.Sculptures_height
-        br
-        strong Material:
-        = sculpture.Sculptures_material
+  h1 Search Results - Sculptures
+
+  .container-fluid
+    .row
+      each item in results
+        div.col-sm-2(onclick=`view(${item._id})`) 
+          h3 #{item.name}
+          p Year: #{item.year}
+          p Artist: #{item.artist}
+  
+  a(href='/') Back to Home
+
+  script.
+    function view(index) {
+      window.location.href = `/sculptures/${index}`;
+    } 

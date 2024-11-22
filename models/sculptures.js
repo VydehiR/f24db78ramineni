@@ -1,11 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Define the Sculpture Schema
-const SculpturesSchema = new mongoose.Schema({
-  sculpture_name: { type: String, required: true },
-  Sculptures_height: { type: String, required: true },
-  Sculptures_material: { type: String, required: true }
+const sculptureSchema = mongoose.Schema({
+  name: String,
+  year: Number,
+  artist: String
 });
 
-// Export the model
-module.exports = mongoose.model('sculptures', SculpturesSchema);
+module.exports = mongoose.model("Sculpture", sculptureSchema);

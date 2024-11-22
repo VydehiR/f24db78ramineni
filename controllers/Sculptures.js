@@ -1,153 +1,110 @@
-var Sculpture = require('../models/sculptures');
- 
-// List of all Sculptures
-exports.Sculptures_list = async function (req, res) {
-  try {
-    console.log("Fetching all sculptures...");
-    const sculptures = await Sculpture.find();
-    res.setHeader('Content-Type', 'application/json');
-    res.json(sculptures);
-  } catch (err) {
-    console.error("Error fetching sculptures:", err);
-    res.status(500).json({ error: err.message });
-  }
-};
- 
-exports.Sculptures_detail = async function(req, res) {
-  console.log("detail" + req.params.id); // Log the ID to verify
-  try {
-      // Use findById to fetch the sculptures by ID from the database
-      let result = await Sculpture.findById(req.params.id);
-      res.send(result); // Send the sculptures details as JSON
-  } catch (error) {
-      res.status(500); // Send an error status if not found
-      res.send(`{"error": "Document for id ${req.params.id} not found"}`);
-  }
-};
- 
- 
-exports.Sculptures_view_all_Page = async function(req, res) {
-  try {
-      const thesculpturess = await Sculpture.find();
-      res.render('sculptures', { title: 'sculptures Search Results', results: thesculpturess });
-  } catch (err) {
-      res.status(500);
-      res.send(`{"error": ${err}}`);
-  }
-};
- 
-// Get a specific Sculpture by ID
-// exports.Sculpture_view_one_Page = async function (req, res) {
-//   try {
-//     const sculpture = await Sculpture.findById(req.params.id);  // Use req.params.id to get the sculpture by ID
-//     if (!sculpture) {
-//       return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
-//     }
-//     // Render the view and pass the sculpture details
-//     res.render('sculpturedetail', { title: 'Sculpture Detail', sculpture: sculpture });
-//   } catch (err) {
-//     res.status(500).json({ error: `Error fetching sculpture: ${err.message}` });
-//   }
-// };
- 
- 
-// Get a specific Sculpture by ID
-exports.Sculpture_view_one_Page = async function (req, res) {
-  try {
-    const sculpture = await Sculpture.findById(req.params.id);  // Use req.params.id to get the sculpture by ID
-    if (!sculpture) {
-      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
+const Sculpture = require('../models/sculptures');
+
+// Get all Sculptures
+exports.sculpture_list = async function (req, res) {
+    try {
+        const sculptures = await Sculpture.find();
+        res.render('sculptures', { results: sculptures });
+    } catch (err) {
+        res.status(500).send(`Error: ${err}`);
     }
-    // Render the view and pass the sculpture details
-    res.render('sculpturedetail', { title: 'Sculpture Detail', toShow: sculpture });
-  } catch (err) {
-    res.status(500).json({ error: `Error fetching sculpture: ${err.message}` });
-  }
 };
- 
-// exports.Sculpture_view_one_Page = async function (req, res) {
-//   const sculptureId = req.query.id; // Fetch the ID from query parameters
-//   if (!sculptureId) {
-//     return res.status(400).json({ message: "ID is required" });
-//   }
-//   try {
-//     const sculpture = await Sculpture.findById(sculptureId);
-//     if (!sculpture) {
-//       return res.status(404).json({ message: `Sculpture with ID ${sculptureId} not found` });
-//     }
-//     // Render the view and pass the sculpture details
-//     res.render('sculpturedetail', { title: 'Sculpture Detail', sculpture: sculpture });
-//   } catch (err) {
-//     res.status(500).json({ error: `Error fetching sculpture: ${err.message}` });
-//   }
-// };
- 
- 
-// Create a new Sculpture
-exports.Sculptures_create_post = async function (req, res) {
-  try {
-    const { sculpture_name, Sculptures_height, Sculptures_material } = req.body;
-    if (!sculpture_name || !Sculptures_height || !Sculptures_material) {
-      return res.status(400).json({ message: "All fields are required" });
+
+// Create Sculpture
+exports.sculpture_create_post = async function (req, res) {
+    let document = new Sculpture();
+    document.name = req.body.name;
+    document.artist = req.body.artist;
+    document.year = req.body.year;
+    try {
+        let result = await document.save();
+        res.send(result);
+    } catch (err) {
+        res.status(500);
+        res.send(`{"error": ${err}}`);
     }
-    const sculpture = new Sculpture({
-      sculpture_name,
-      Sculptures_height,
-      Sculptures_material,
-    });
-    const newSculpture = await sculpture.save();
-    res.status(201).json(newSculpture);
-  } catch (err) {
-    res.status(500).json({ error: `Error creating sculpture: ${err.message}` });
-  }
 };
- 
-// Update a Sculpture
-exports.Sculptures_update_put = async function (req, res) {
-  try {
-    let sculpture = await Sculpture.findById(req.params.id);
-    if (!sculpture) {
-      return res.status(404).json({ message: `Sculpture with ID ${req.params.id} not found` });
+
+// Update Sculpture
+exports.sculpture_update_put = async function (req, res) {
+    console.log(`update on id ${req.params.id} with body ${JSON.stringify(req.body)}`);
+    try {
+        let toUpdate = await Sculpture.findById(req.params.id);
+        // Update properties
+        if (req.body.name) toUpdate.name = req.body.name;
+        if (req.body.year) toUpdate.year = req.body.year;
+        if (req.body.artist) toUpdate.artist = req.body.artist;
+        let result = await toUpdate.save();
+        console.log("Success " + result);
+        res.send(result);
+    } catch (err) {
+        res.status(500);
+        res.send(`{"error": ${err}: Update for id ${req.params.id} failed`);
     }
- 
-    if (req.body.sculpture_name) sculpture.sculpture_name = req.body.sculpture_name;
-    if (req.body.Sculptures_height) sculpture.Sculptures_height = req.body.Sculptures_height;
-    if (req.body.Sculptures_material) sculpture.Sculptures_material = req.body.Sculptures_material;
- 
-    const updatedSculpture = await sculpture.save();
-    res.json(updatedSculpture);
-  } catch (err) {
-    res.status(500).json({ error: `Error updating sculpture: ${err.message}` });
-  }
 };
- 
-// Delete a Sculpture
-exports.Sculptures_delete = async function (req, res) {
-  try {
-    const sculpture = await Sculpture.findByIdAndDelete(req.params.id);
-    if (!sculpture) {
-      return res.status(404).send({ message: `Sculpture with ID ${req.params.id} not found` });
+
+// Delete Sculpture
+exports.sculpture_delete = async function (req, res) {
+    console.log("delete " + req.params.id);
+    try {
+        const result = await Sculpture.findByIdAndDelete(req.params.id);
+        console.log("Removed " + result);
+        res.send(result);
+    } catch (err) {
+        res.status(500);
+        res.send(`{"error": Error deleting ${err}}`);
     }
-    res.json(sculpture);
-  } catch (err) {
-    res.status(500).send({ error: `Error deleting sculpture: ${err.message}` });
-  }
 };
- 
- // Handle a show-one view with ID specified by query
-exports.Sculpture_view_one_Page = async function (req, res) {
-  console.log("Single view for ID: " + req.query.id);
-  try {
-    const result = await Sculpture.findById(req.query.id);
-    if (!result) {
-      return res.status(404).send(`{'error': 'Sculpture with ID ${req.query.id} not found'}`);
+
+// View one Sculpture
+exports.sculpture_view_one_Page = async function (req, res) {
+    console.log("single view for id " + req.query.id);
+    try {
+        result = await Sculpture.findById(req.query.id);
+        res.render('sculpturesdetail',
+            { title: 'Sculpture Detail', toShow: result });
+    } catch (err) {
+        res.status(500);
+        res.send(`{'error': '${err}'}`);
     }
-    res.render('srr11rrculpturedetail', {
-      title: 'Sculpture Detail',
-      toShow: result,
-    });
-  } catch (err) {
-    res.status(500);
-    res.send(`{'error': '${err}'}`);
-  }
+};
+
+// Create Sculpture Page
+exports.sculpture_create_Page = function (req, res) {
+    console.log("create view");
+    try {
+        res.render('sculpturescreate', { title: 'Sculpture Create' });
+    } catch (err) {
+        res.status(500);
+        res.send(`{'error': '${err}'}`);
+    }
+}
+
+// Update Sculpture Page
+exports.sculpture_update_Page = async function (req, res) {
+    console.log("update view for item " + req.query.id);
+    try {
+        let result = await Sculpture.findById(req.query.id);
+        res.render('sculpturesupdate', { title: 'Sculpture Update', toShow: result });
+    }
+    catch (err) {
+        res.status(500);
+        res.send(`{'error': '${err}'}`);
+    }
+};
+
+// Delete Sculpture Page
+exports.sculpture_delete_Page = async function (req, res) {
+    console.log("Delete view for id " + req.query.id);
+    try {
+        result = await Sculpture.findById(req.query.id);
+        res.render('sculpturesdelete', {
+            title: 'Sculpture Delete', toShow:
+                result
+        });
+    }
+    catch (err) {
+        res.status(500);
+        res.send(`{'error': '${err}'}`);
+    }
 };

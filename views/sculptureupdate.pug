@@ -1,0 +1,53 @@
+extends layout
+
+block content
+    h1 Sculpture Update
+
+    if (toShow == null)
+        h2 No instance found to update
+    else
+        - let sculptureid = toShow._id
+        - let name = toShow.name
+        - let sculpturesartist = toShow.artist
+        - let sculpturesyear = toShow.year
+
+        div.row.mb-3
+            div.mr-1.font-weight-bold ID is:
+            div #{sculptureid}
+
+        - let actionid = "/resource/sculptures/" + sculptureid
+        form(id='sculpturesForm', action=actionid, method="PUT")
+            div.form-group
+                label.sculptureAttr(for='name') Sculpture Name:
+                input#name(type='text', name='name', value=name, class='form-control')
+            div.form-group
+                label.sculptureAttr(for='year') Sculpture Year:
+                input#year(type='text', name='year', value=sculpturesyear, class='form-control')
+            div.form-group
+                label.sculptureAttr(for='artist') Sculpture Artist:
+                input#artist(type='text', name='artist', value=sculpturesartist, class='form-control')
+            input(type="submit", class="btn btn-primary mt-2")
+
+        button(class="btn btn-secondary mt-2 ml-2" onclick="goBack()") Cancel
+
+    script.
+        function goBack() {
+            window.location.href = "/sculptures";
+        }
+
+    script.
+        document.forms['sculpturesForm'].addEventListener('submit', (event) => {
+            event.preventDefault();
+            fetch(event.target.action, {
+                method: 'PUT',
+                body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+            })
+            .then((resp) => resp.json())
+            .then((body) => {
+                alert("Update succeeded");
+                window.location.href = "/sculptures";
+            })
+            .catch((error) => {
+                alert("Update failed " + error);
+            });
+        });

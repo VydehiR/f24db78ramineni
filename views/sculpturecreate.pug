@@ -1,16 +1,29 @@
 extends layout
 
 block content
-  h1 Create a New Sculpture
-  form(action='/sculptures', method='POST')
-    div
-      label(for='sculpture_name') Sculpture Name
-      input(type='text', name='sculpture_name', required=true)
-    div
-      label(for='Sculptures_height') Sculpture Height
-      input(type='number', name='Sculptures_height', required=true)
-    div
-      label(for='Sculptures_material') Sculpture Material
-      input(type='text', name='Sculptures_material', required=true)
-    div
-      button(type='submit') Create Sculpture
+  h1= title
+  form(id='SculptureForm', action="/resource/sculptures", method="POST")
+    div.form-group
+      label.sculptureAttr(for='sculpture_name') Sculpture Name
+      input#sculpture_name(type='text', name='sculpture_name')
+    div.form-group
+      label.sculptureAttr(for='year') Year
+      input#year(type='number', name='year')
+    div.form-group
+      label.sculptureAttr(for='artist') Artist
+      input#artist(type='text', name='artist')
+    input(type="submit")
+  script.
+    document.forms['SculptureForm'].addEventListener('submit', (event) => {
+      event.preventDefault();
+      fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target))
+      }).then((resp) => {
+        return resp.json();
+      }).then((body) => {
+        alert("Save succeeded");
+      }).catch((error) => {
+        alert("Save failed " + error);
+      });
+    });
