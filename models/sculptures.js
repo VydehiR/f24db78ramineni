@@ -9,5 +9,5 @@ const SculpturesSchema = new mongoose.Schema({
   Sculptures_height: { type: String, required: true }
 });
 
-const Sculpture = mongoose.model('Sculpture', SculptureSchema);
+const Sculpture = mongoose.model('Sculpture', SculpturesSchema);
 module.exports = Sculpture;
