@@ -1,53 +1,46 @@
+
 extends layout
 
 block content
-    h1 Sculpture Update
-
-    if (toShow == null)
-        h2 No instance found to update
-    else
+    h1= title
         - let sculptureid = toShow._id
         - let name = toShow.name
-        - let sculpturesartist = toShow.artist
-        - let sculpturesyear = toShow.year
+        - let sculpturesmaterial = toShow.material
+        - let sculpturesheight = toShow.height
 
-        div.row.mb-3
-            div.mr-1.font-weight-bold ID is:
-            div #{sculptureid}
 
-        - let actionid = "/resource/sculptures/" + sculptureid
-        form(id='sculpturesForm', action=actionid, method="PUT")
-            div.form-group
-                label.sculptureAttr(for='name') Sculpture Name:
-                input#name(type='text', name='name', value=name, class='form-control')
-            div.form-group
-                label.sculptureAttr(for='year') Sculpture Year:
-                input#year(type='text', name='year', value=sculpturesyear, class='form-control')
-            div.form-group
-                label.sculptureAttr(for='artist') Sculpture Artist:
-                input#artist(type='text', name='artist', value=sculpturesartist, class='form-control')
-            input(type="submit", class="btn btn-primary mt-2")
+    div.row(class='mb-2')
+        div.mr-1 ID is:
+        div #{Sculptureid}
+    - let actionid = "/resource/Sculptures/" + Sculptureid
+    form(id='SculptureForm', action=actionid, method="PUT")
+        div.form-group
+            label(for='Sculpture_name') Sculpture name
+            input#Sculpture_name(type='text', name='Sculpture_name', value=name)
 
-        button(class="btn btn-secondary mt-2 ml-2" onclick="goBack()") Cancel
+        div.form-group
+            label(for='origin') Sculpture_height
+            input#sculpture_height(type='number', name='Sculpture_height', value=Sculpture_height)
 
+        div.form-group
+            label(for='Sculpture_material') Sculpture_material
+            input#Sculpture_material(type='text', name='Sculpture_material', value=Sculpture_material)
+
+        input(type="submit")
     script.
-        function goBack() {
-            window.location.href = "/sculptures";
-        }
-
-    script.
-        document.forms['sculpturesForm'].addEventListener('submit', (event) => {
+        document.forms['SculptureForm'].addEventListener('submit', (event) => {
             event.preventDefault();
+            // Show user that form is being submitted
             fetch(event.target.action, {
                 method: 'PUT',
-                body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-            })
-            .then((resp) => resp.json())
-            .then((body) => {
+                body: new URLSearchParams(new FormData(event.target)) // Form data
+            }).then((resp) => {
+                return resp.json(); // Expecting a JSON response
+            }).then((body) => {
                 alert("Update succeeded");
-                window.location.href = "/sculptures";
-            })
-            .catch((error) => {
+                // Optionally handle response body
+            }).catch((error) => {
                 alert("Update failed " + error);
+                // Handle error
             });
         });

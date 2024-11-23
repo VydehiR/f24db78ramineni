@@ -1,19 +1,10 @@
+
 extends layout
 
 block content
-  h1 Search Results - Sculptures
-
-  .container-fluid
-    .row
-      each item in results
+  h1= title
+  each item in results
         div.col-sm-2(onclick=`view(${item._id})`) 
-          h3 #{item.name}
-          p Year: #{item.year}
-          p Artist: #{item.artist}
-  
-  a(href='/') Back to Home
-
-  script.
-    function view(index) {
-      window.location.href = `/sculptures/${index}`;
-    } 
+          h3 Name : #{item.name}
+          p Material: #{item.Sculptures_material}
+          p Height: #{item.Sculptures_height}

@@ -2,28 +2,31 @@ extends layout
 
 block content
   h1= title
-  form(id='SculptureForm', action="/resource/sculptures", method="POST")
+  form(id='SculptureForm', action="/resource/Sculptures", method="POST")
     div.form-group
-      label.sculptureAttr(for='sculpture_name') Sculpture Name
-      input#sculpture_name(type='text', name='sculpture_name')
+      label.SculptureAttr(for='Sculpture_name') Sculpture name
+      input#Sculpture_name(type='text', name='Sculpture_name', required=true)
     div.form-group
-      label.sculptureAttr(for='year') Year
-      input#year(type='number', name='year')
+      label.SculptureAttr(for='Sculptures_material') Sculpture Material
+      input#Sculptures_material(type='text', name='Sculptures_material', required=true)
     div.form-group
-      label.sculptureAttr(for='artist') Artist
-      input#artist(type='text', name='artist')
-    input(type="submit")
+      label.SculptureAttr(for='Sculptures_height') Sculptures height
+      input#Sculptures_height(type='number', name='Sculptures_height', required=true)
+    input(type="submit", value="Create")
+  
   script.
     document.forms['SculptureForm'].addEventListener('submit', (event) => {
       event.preventDefault();
+      // Show user that form is being submitted
       fetch(event.target.action, {
         method: 'POST',
-        body: new URLSearchParams(new FormData(event.target))
-      }).then((resp) => {
-        return resp.json();
-      }).then((body) => {
-        alert("Save succeeded");
-      }).catch((error) => {
-        alert("Save failed " + error);
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+      })
+      .then((resp) => resp.json())
+      .then((body) => {
+        alert("Save succeeded!");
+      })
+      .catch((error) => {
+        alert("Save failed: " + error);
       });
     });
