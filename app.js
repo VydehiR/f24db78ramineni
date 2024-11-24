@@ -45,6 +45,9 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
+var methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
 
 // Routes setup
 app.use('/', indexRouter); // Home route
@@ -58,7 +61,10 @@ app.use('/resource', resourceRouter); // API for resource routes
 app.use(function (req, res, next) {
   next(createError(404));
 });
-
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`); // This will log every request to the console
+  next();
+});
 // General error handler
 app.use(function (err, req, res, next) {
   // Set locals, only providing error in development

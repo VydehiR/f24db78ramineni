@@ -72,8 +72,6 @@ exports.Sculpture_delete = async function (req, res) {
   }
 };
 
-
-
 // Render update page
 exports.Sculpture_update_Page = async function (req, res) {
   try {
@@ -95,15 +93,16 @@ exports.Sculpture_delete_Page = async function (req, res) {
     res.status(404).send({ error: err.message });
   }
 };
+
 exports.Sculpture_view_all_Page = async function (req, res) {
-    try {
-      const sculptures = await Sculpture.find();
-      res.render('Sculptures', { title: 'Sculpture Search Results', results: sculptures });
-    } catch (err) {
-      res.status(500).send({ error: err.message });
-    }
-  };
-  
-  exports.Sculpture_create_Page = function (req, res) {
-    res.render('Sculpturecreate', { title: 'Create Sculpture' });
-  };
+  try {
+    const sculptures = await Sculpture.find();
+    res.render('Sculptures', { title: 'Sculpture Search Results', results: sculptures });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+};
+
+exports.Sculpture_create_Page = function (req, res) {
+  res.render('Sculpturecreate', { title: 'Create Sculpture' });
+};

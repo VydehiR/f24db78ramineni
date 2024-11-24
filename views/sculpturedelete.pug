@@ -15,4 +15,10 @@ block content
     div.row
       div.col-md-4.font-weight-bold Height:
       div.col-md-8.text-info #{toShow.sculpture_height} cm
+
+  // Delete button form
+  form(action=`/Sculptures/delete/${toShow._id}`, method='POST', style='display:inline')
+    input(type='hidden', name='_method', value='DELETE') // Method override
+    button.btn.btn-danger.mt-4(type='submit') Delete Sculpture
+
   a.btn.btn-primary.mt-4(href='/sculptures') Back to List
