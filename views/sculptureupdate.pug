@@ -2,7 +2,7 @@ extends layout
 
 block content
   h1= title
-  form(id='sculptureForm', action=`/sculptures/${toShow._id}`, method='PUT')
+  form(id='sculptureForm', action=`/sculptures/${toShow._id}`, method='POST')
     input(type='hidden', name='_method', value='PUT')
     div.form-group
       label(for='sculpture_name') Sculpture Name:

@@ -71,18 +71,17 @@ app.use(function (err, req, res, next) {
 });
 
 // Database reseeding logic (only for development)
-let reseed = true; // Set to false to prevent reseeding
-if (reseed) {
+if (process.env.RESEED_DB === 'true') { // Use environment variable to control reseeding
   async function recreateDB() {
     try {
       // Clear existing data
       await Sculpture.deleteMany();
-      
+
       // Sample data for sculptures
       const sculptures = [
-        { sculpture_name: "The Winged Victory of Samothrace", sculpture_height: "245", sculpture_material: "Marble" },
-        { sculpture_name: "David", sculpture_height: "517", sculpture_material: "Marble" },
-        { sculpture_name: "Bust of Nefertiti", sculpture_height: "48", sculpture_material: "Limestone" },
+        { sculpture_name: "The Winged Victory of Samothrace", sculpture_height: 245, sculpture_material: "Marble" },
+        { sculpture_name: "David", sculpture_height: 517, sculpture_material: "Marble" },
+        { sculpture_name: "Bust of Nefertiti", sculpture_height: 48, sculpture_material: "Limestone" },
       ];
 
       // Insert sample sculptures into the database
@@ -102,6 +101,14 @@ mongoose.connection.on('connected', () => {
 
 mongoose.connection.on('error', (err) => {
   console.error(`MongoDB connection error: ${err}`);
+});
+
+// Handle app shutdown gracefully
+process.on('SIGINT', () => {
+  mongoose.connection.close(() => {
+    console.log('Mongoose connection closed due to app termination');
+    process.exit(0);
+  });
 });
 
 module.exports = app;
