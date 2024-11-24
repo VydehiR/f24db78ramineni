@@ -12,6 +12,6 @@ router.get('/delete', SculptureController.Sculpture_delete_Page); // Delete page
 // API endpoints for CRUD operations
 router.post('/create', SculptureController.Sculpture_create_post); // Post to create
 router.put('/:id', SculptureController.Sculpture_update_put); // Put to update
-router.delete('/delete/:id', SculptureController.Sculpture_delete); // Correct DELETE route
+router.delete('/delete/:id', SculptureController.Sculpture_delete); // Delete route
 
 module.exports = router;

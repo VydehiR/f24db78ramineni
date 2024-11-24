@@ -2,8 +2,31 @@ extends layout
 
 block content
   h1= title
-  each item in results
-    div.col-sm-2(onclick=`view('${item._id}')`) 
-      h3 Name: #{item.sculpture_name}
-      p Material: #{item.sculpture_material}
-      p Height: #{item.sculpture_height}
+  form(action='/create', method='POST', name='SculptureForm')
+    label(for='name') Sculpture Name:
+    input(type='text', name='name', required)
+    br
+    label(for='material') Sculpture Material:
+    input(type='text', name='material', required)
+    br
+    label(for='height') Sculpture Height (cm):
+    input(type='number', name='height', required)
+    br
+    button(type='submit') Create
+
+block scripts
+  script.
+    document.forms['SculptureForm'].addEventListener('submit', (event) => {
+      event.preventDefault();
+      fetch(event.target.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(new FormData(event.target)),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error('Failed to save');
+          return response.json();
+        })
+        .then((data) => alert(data.message || 'Sculpture created successfully!'))
+        .catch((err) => alert('Error: ' + err.message));
+    });

@@ -24,7 +24,10 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://vydehi:Vydehi123@cluste
   useUnifiedTopology: true,
 })
   .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch((err) => console.error('Database connection error:', err));
+  .catch((err) => {
+    console.error('Database connection error:', err);
+    process.exit(1); // Exit process if DB connection fails
+  });
 
 // Initialize Express app
 var app = express();
@@ -45,9 +48,10 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
+
+// Method-override for handling HTTP verbs in forms
 var methodOverride = require('method-override');
 app.use(methodOverride('_method'));
-
 
 // Routes setup
 app.use('/', indexRouter); // Home route
@@ -61,10 +65,7 @@ app.use('/resource', resourceRouter); // API for resource routes
 app.use(function (req, res, next) {
   next(createError(404));
 });
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`); // This will log every request to the console
-  next();
-});
+
 // General error handler
 app.use(function (err, req, res, next) {
   // Set locals, only providing error in development
@@ -111,6 +112,13 @@ mongoose.connection.on('error', (err) => {
 
 // Handle app shutdown gracefully
 process.on('SIGINT', () => {
+  mongoose.connection.close(() => {
+    console.log('Mongoose connection closed due to app termination');
+    process.exit(0);
+  });
+});
+
+process.on('SIGTERM', () => {
   mongoose.connection.close(() => {
     console.log('Mongoose connection closed due to app termination');
     process.exit(0);

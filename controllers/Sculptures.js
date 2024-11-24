@@ -44,7 +44,7 @@ exports.Sculpture_update_put = async function (req, res) {
     const { id } = req.params;
     const updatedSculpture = await Sculpture.findByIdAndUpdate(
       id,
-      req.body, // Update with the body data
+      req.body, 
       { new: true, runValidators: true }
     );
     if (!updatedSculpture) {
@@ -64,11 +64,13 @@ exports.Sculpture_delete = async function (req, res) {
   try {
     const result = await Sculpture.findByIdAndDelete(req.params.id);
     if (!result) {
-      return res.status(404).send({ error: 'Sculpture not found' });
+      return res.status(404).send('Sculpture not found');
     }
-    res.status(200).send({ message: 'Sculpture deleted successfully' });
+    console.log(`Sculpture with ID ${req.params.id} deleted successfully`);
+    res.redirect('/Sculptures');
   } catch (err) {
-    res.status(500).send({ error: err.message });
+    console.error(`Error deleting sculpture: ${err.message}`);
+    res.status(500).send('Error deleting sculpture');
   }
 };
 
