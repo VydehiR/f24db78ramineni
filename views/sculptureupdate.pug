@@ -1,46 +1,46 @@
-
 extends layout
 
 block content
-    h1= title
-        - let sculptureid = toShow._id
-        - let name = toShow.name
-        - let sculpturesmaterial = toShow.material
-        - let sculpturesheight = toShow.height
+  h1= title
+  form(id='sculptureForm', action=`/sculptures/${toShow._id}`, method='PUT')
+    input(type='hidden', name='_method', value='PUT')
+    div.form-group
+      label(for='sculpture_name') Sculpture Name:
+      input#sculpture_name(type='text', name='sculpture_name', value=toShow.sculpture_name, required=true)
 
+    div.form-group
+      label(for='sculpture_material') Material:
+      input#sculpture_material(type='text', name='sculpture_material', value=toShow.sculpture_material, required=true)
 
-    div.row(class='mb-2')
-        div.mr-1 ID is:
-        div #{Sculptureid}
-    - let actionid = "/resource/Sculptures/" + Sculptureid
-    form(id='SculptureForm', action=actionid, method="PUT")
-        div.form-group
-            label(for='Sculpture_name') Sculpture name
-            input#Sculpture_name(type='text', name='Sculpture_name', value=name)
+    div.form-group
+      label(for='sculpture_height') Height (in cm):
+      input#sculpture_height(type='number', name='sculpture_height', value=toShow.sculpture_height, min='1', required=true)
 
-        div.form-group
-            label(for='origin') Sculpture_height
-            input#sculpture_height(type='number', name='Sculpture_height', value=Sculpture_height)
+    input.btn.btn-primary(type='submit', value='Update')
 
-        div.form-group
-            label(for='Sculpture_material') Sculpture_material
-            input#Sculpture_material(type='text', name='Sculpture_material', value=Sculpture_material)
+block script
+  script.
+    document.forms['sculptureForm'].addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const data = Object.fromEntries(formData.entries());
 
-        input(type="submit")
-    script.
-        document.forms['SculptureForm'].addEventListener('submit', (event) => {
-            event.preventDefault();
-            // Show user that form is being submitted
-            fetch(event.target.action, {
-                method: 'PUT',
-                body: new URLSearchParams(new FormData(event.target)) // Form data
-            }).then((resp) => {
-                return resp.json(); // Expecting a JSON response
-            }).then((body) => {
-                alert("Update succeeded");
-                // Optionally handle response body
-            }).catch((error) => {
-                alert("Update failed " + error);
-                // Handle error
-            });
+      try {
+        const response = await fetch(event.target.action, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
         });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Unknown error occurred');
+        }
+
+        alert('Update succeeded');
+        window.location.href = "/"; // Redirect to homepage or appropriate page
+      } catch (error) {
+        console.error('Update failed:', error.message);
+        alert('Update failed: ' + error.message);
+      }
+    });

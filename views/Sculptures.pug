@@ -1,10 +1,9 @@
-
 extends layout
 
 block content
   h1= title
   each item in results
-        div.col-sm-2(onclick=`view(${item._id})`) 
-          h3 Name : #{item.name}
-          p Material: #{item.Sculptures_material}
-          p Height: #{item.Sculptures_height}
+    div.col-sm-2(onclick=`view('${item._id}')`) 
+      h3 Name: #{item.sculpture_name}
+      p Material: #{item.sculpture_material}
+      p Height: #{item.sculpture_height}

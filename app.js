@@ -9,29 +9,29 @@ require('dotenv').config(); // Load environment variables from .env file
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gridRouter = require('./routes/grid');
-var SculpturesRouter = require('./routes/Sculptures');  // Add the Sculptures router
+var sculpturesRouter = require('./routes/Sculptures'); // Fixed naming convention
 var pickRouter = require('./routes/pick');
-var resourceRouter = require('./routes/resource');  // Resource router
+var resourceRouter = require('./routes/resource');
 
 // MongoDB imports
 const mongoose = require('mongoose');
-
-mongoose.connect('mongodb+srv://ajithanarra24:ugekUdGXDkr3vqem@cluster0.m85be.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-  serverSelectionTimeoutMS: 10000,
-}).then(() => {
-  console.log('Connected to MongoDB Atlas');
-}).catch((err) => {
-  console.error('Database connection error:', err);
-});
-const Sculpture = require("./models/Sculptures");
-
-var app = express();
+const Sculpture = require('./models/Sculptures');
 
 // MongoDB connection setup
+mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://vydehi:Vydehi123@cluster0.f2j9o.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+  serverSelectionTimeoutMS: 10000,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch((err) => console.error('Database connection error:', err));
+
+// Initialize Express app
+var app = express();
 
 // Middleware setup
 app.use(logger('dev'));
-app.use(express.json());  // Add body parser middleware to handle JSON payload
+app.use(express.json()); // Add body parser middleware to handle JSON payload
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,21 +40,27 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// Middleware to log HTTP method and URL
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 // Routes setup
-app.use('/resource', resourceRouter);  // API for resource routes
-app.use('/grid', gridRouter);  // Route for /grid
-app.use('/Sculptures', SculpturesRouter);  // Route for /Sculptures
-app.use('/pick', pickRouter);  // Route for /pick
-app.use('/', indexRouter);  // Route for the homepSculptures_material
-app.use('/users', usersRouter);  // Route for users
+app.use('/', indexRouter); // Home route
+app.use('/users', usersRouter); // User route
+app.use('/grid', gridRouter); // Route for /grid
+app.use('/Sculptures', sculpturesRouter); // Route for /sculptures
+app.use('/pick', pickRouter); // Route for /pick
+app.use('/resource', resourceRouter); // API for resource routes
 
 // Error handler for 404
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // General error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // Set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -63,24 +69,35 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-let reseed = true;  // Set to false to prevent reseeding
+
+// Database reseeding logic (only for development)
+let reseed = true; // Set to false to prevent reseeding
 if (reseed) {
   async function recreateDB() {
-    await Sculpture.deleteMany();
-    const instance1 = new Sculpture({ Sculpture_name: "vase", Sculptures_height: "Greece", Sculptures_material: 2000 });
-    const instance2 = new Sculpture({ Sculpture_name: "sword", Sculptures_height: "Japan", Sculptures_material: 800 });
-    const instance3 = new Sculpture({ Sculpture_name: "painting", Sculptures_height: "Italy", Sculptures_material: 500 });
-    await instance1.save();
-    await instance2.save();
-    await instance3.save();
-    console.log("Database seeded with Sculptures!");
+    try {
+      // Clear existing data
+      await Sculpture.deleteMany();
+      
+      // Sample data for sculptures
+      const sculptures = [
+        { sculpture_name: "The Winged Victory of Samothrace", sculpture_height: "245", sculpture_material: "Marble" },
+        { sculpture_name: "David", sculpture_height: "517", sculpture_material: "Marble" },
+        { sculpture_name: "Bust of Nefertiti", sculpture_height: "48", sculpture_material: "Limestone" },
+      ];
+
+      // Insert sample sculptures into the database
+      await Sculpture.insertMany(sculptures);
+      console.log("Database seeded with sculptures!");
+    } catch (err) {
+      console.error(`Error during database seeding: ${err.message}`);
+    }
   }
   recreateDB();
 }
 
-// MongoDB Connection Status
+// MongoDB connection event handlers
 mongoose.connection.on('connected', () => {
-  console.log('Connected to MongoDB');
+  console.log('MongoDB connection established successfully');
 });
 
 mongoose.connection.on('error', (err) => {

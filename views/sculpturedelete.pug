@@ -1,48 +1,18 @@
-
-
 extends layout
 
 block content
   h1= title
-  if (toShow == null)
-    h2 No instance to delete
-  else
-        - let sculptureid = toShow._id
-        - let name = toShow.name
-        - let sculpturesmaterial = toShow.material
-        - let sculpturesheight = toShow.height 
-        - let actionid = "/resource/sculptures/" + sculptureid
-    script let actionid = "#{actionid}"
-    div
-      div.row
-                div(class='sculptureAttr mr-3') Sculpture ID is:
-                div #{sculptureid}
-            div.row
-                div(class='sculptureAttr mr-3') Sculpture Name is:
-                div #{name}
-            div.row
-                div(class='sculptureAttr mr-3') Sculpture Material is:
-                div #{sculpturesmaterial}
-            div.row
-                div(class='sculptureAttr mr-3') Sculpture Height  is:
-                div #{sculpturesheight}
-    button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete
-    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
-  script.
-      function cancel() {
-        window.origin.href = '/Sculptures';
-        }
-  script.
-    function deleteOnid() {
-      console.log("Starting delete");
-      fetch(actionid, {
-        method: 'DELETE'
-        }).then((resp) => {
-        return resp.json();
-        }).then((body) => {
-        alert("Delete succeeded");
-        window.origin.href = '/Sculptures';
-        }).catch((error) => {
-        alert("Delete failed: " + error);
-      });
-    }
+  div.container
+    div.row
+      div.col-md-4.font-weight-bold Sculpture ID:
+      div.col-md-8.text-info #{toShow._id}
+    div.row
+      div.col-md-4.font-weight-bold Sculpture Name:
+      div.col-md-8.text-info #{toShow.sculpture_name}
+    div.row
+      div.col-md-4.font-weight-bold Material:
+      div.col-md-8.text-info #{toShow.sculpture_material}
+    div.row
+      div.col-md-4.font-weight-bold Height:
+      div.col-md-8.text-info #{toShow.sculpture_height} cm
+  a.btn.btn-primary.mt-4(href='/sculptures') Back to List

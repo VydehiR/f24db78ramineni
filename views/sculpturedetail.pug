@@ -2,22 +2,17 @@ extends layout
 
 block content
   h1= title
-    - let sculptureid = toShow._id
-    - let name = toShow.name
-    - let sculpturesmaterial = toShow.material 
-    - let sculpturesheight  = toShow.height 
   div.container
     div.row
       div.col-md-4.font-weight-bold Sculpture ID:
-      div.col-md-8.text-info #{Sculptureid}
+      div.col-md-8.text-info #{toShow._id}
     div.row
       div.col-md-4.font-weight-bold Sculpture Name:
-      div.col-md-8.text-info #{name}
+      div.col-md-8.text-info #{toShow.sculpture_name}
     div.row
-      div.col-md-4.font-weight-bold Sculpture Year:
-      div.col-md-8.text-info #{sculpturesmaterial}
+      div.col-md-4.font-weight-bold Material:
+      div.col-md-8.text-info #{toShow.sculpture_material}
     div.row
-      div.col-md-4.font-weight-bold Sculpture Height:
-      div.col-md-8.text-info #{sculpturesheight}
-
-  a.btn.btn-primary.mt-4(href='/Sculptures') Back to List
+      div.col-md-4.font-weight-bold Height:
+      div.col-md-8.text-info #{toShow.sculpture_height} cm
+  a.btn.btn-primary.mt-4(href='/sculptures') Back to List
