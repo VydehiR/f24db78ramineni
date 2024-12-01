@@ -2,16 +2,15 @@ const express = require('express');
 const router = express.Router();
 const SculptureController = require('../controllers/Sculptures');
 
-// Routes for rendering pages
-router.get('/', SculptureController.Sculpture_view_all_Page); // List all sculptures
-router.get('/detail', SculptureController.Sculpture_view_one_Page); // View one sculpture
-router.get('/create', SculptureController.Sculpture_create_Page); // Create page
-router.get('/update', SculptureController.Sculpture_update_Page); // Update page
-router.get('/delete', SculptureController.Sculpture_delete_Page); // Delete page
+// Dynamic routes for fetching and viewing sculptures
+router.get('/', SculptureController.Sculpture_view_all_Page);
+router.get('/detail/:id', SculptureController.Sculpture_view_one_Page); // Updated route to include :id
+router.get('/create', SculptureController.Sculpture_create_Page);
+router.get('/update', SculptureController.Sculpture_update_Page);
+router.get('/delete', SculptureController.Sculpture_delete_Page);
 
-// API endpoints for CRUD operations
-router.post('/create', SculptureController.Sculpture_create_post); // Post to create
-router.put('/:id', SculptureController.Sculpture_update_put); // Put to update
-router.delete('/delete/:id', SculptureController.Sculpture_delete); // Delete route
+router.post('/create', SculptureController.Sculpture_create_post);
+router.put('/:id', SculptureController.Sculpture_update_put);
+router.delete('/delete/:id', SculptureController.Sculpture_delete);
 
 module.exports = router;
