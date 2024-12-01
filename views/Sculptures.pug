@@ -2,31 +2,23 @@ extends layout
 
 block content
   h1= title
-  form(action='/create', method='POST', name='SculptureForm')
-    label(for='name') Sculpture Name:
-    input(type='text', name='name', required)
-    br
-    label(for='material') Sculpture Material:
-    input(type='text', name='material', required)
-    br
-    label(for='height') Sculpture Height (cm):
-    input(type='number', name='height', required)
-    br
-    button(type='submit') Create
+  if success
+    .alert.alert-success.alert-dismissible.fade.show(role="alert")
+      strong Success! 
+      | #{success}
+      button.close(type="button" data-dismiss="alert" aria-label="Close")
+        span(aria-hidden="true") &times;
 
-block scripts
-  script.
-    document.forms['SculptureForm'].addEventListener('submit', (event) => {
-      event.preventDefault();
-      fetch(event.target.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(event.target)),
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error('Failed to save');
-          return response.json();
-        })
-        .then((data) => alert(data.message || 'Sculpture created successfully!'))
-        .catch((err) => alert('Error: ' + err.message));
-    });
+  .container
+    each sculpture in results
+      .row.mb-3
+        .col-md-4.font-weight-bold Sculpture Name:
+        .col-md-8.text-info= sculpture.sculpture_name
+        .col-md-4.font-weight-bold Material:
+        .col-md-8.text-info= sculpture.sculpture_material
+        .col-md-4.font-weight-bold Height:
+        .col-md-8.text-info= sculpture.sculpture_height + ' cm'
+        .col-md-12
+          a.btn.btn-danger(href=`/Sculptures/delete/${sculpture._id}`) Delete
+          a.btn.btn-primary(href=`/Sculptures/detail/?id=${sculpture._id}`) View Details
+  a.btn.btn-primary.mt-4(href='/Sculptures/create') Add New Sculpture
