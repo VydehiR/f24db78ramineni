@@ -1,32 +1,33 @@
+
 extends layout
 
 block content
   h1= title
-  form(action='/Sculptures/create', method='POST', name='SculptureForm')
-    label(for='sculpture_name') Sculpture Name:
-    input(type='text', name='sculpture_name', required)
-    br
-    label(for='sculpture_material') Sculpture Material:
-    input(type='text', name='sculpture_material', required)
-    br
-    label(for='sculpture_height') Sculpture Height (cm):
-    input(type='number', name='sculpture_height', required)
-    br
-    button(type='submit') Create
-
-block script
+  form(id='sculptureForm', action="/resource/sculptures", method="POST")
+    div.form-group
+      label.sculptureAttr(for='sculpture_name') Sculpture Name
+      input#site_name(type='text', name='sculpture_name', required=true)
+    div.form-group
+      label.sculptureAttr(for='sculpture_material') Sculprure material
+      input#location(type='text', name='origin', required=true)
+    div.form-group
+      label.sculptureAttr(for='sculpture_height') Sculpture height 
+      input#year_established(type='number', name='sculpture_height', required=true)
+    input(type="submit", value="Create")
+  
   script.
-    document.forms['SculptureForm'].addEventListener('submit', (event) => {
+    document.forms['sculptureForm'].addEventListener('submit', (event) => {
       event.preventDefault();
+      // Show user that form is being submitted
       fetch(event.target.action, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.fromEntries(new FormData(event.target))),
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
       })
-        .then((response) => {
-          if (!response.ok) throw new Error("Failed to save");
-          return response.json();
-        })
-        .then((data) => alert(data.message || "Sculpture created successfully!"))
-        .catch((err) => alert("Error: " + err.message));
+      .then((resp) => resp.json())
+      .then((body) => {
+        alert("Save succeeded!");
+      })
+      .catch((error) => {
+        alert("Save failed: " + error);
+      });
     });

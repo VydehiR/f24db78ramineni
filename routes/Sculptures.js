@@ -1,18 +1,30 @@
-const express = require('express');
-const router = express.Router();
-const SculptureController = require('../controllers/Sculptures');
 
-// Dynamic routes for fetching and viewing sculptures
-router.get('/', SculptureController.Sculpture_view_all_Page);
-router.get('/detail/:id', SculptureController.Sculpture_view_one_Page); // Updated route to include :id
-router.get('/create', SculptureController.Sculpture_create_Page);
-router.get('/update', SculptureController.Sculpture_update_Page);
-router.get('/delete', SculptureController.Sculpture_delete_Page);
-router.get('/detail', SculptureController.Sculpture_view_one_Page);
-
-
-router.post('/create', SculptureController.Sculpture_create_post);
-router.put('/:id', SculptureController.Sculpture_update_put);
-router.delete('/delete/:id', SculptureController.Sculpture_delete);
-
+// routes/sculptures.js
+var express = require('express');
+var router = express.Router();
+const secured = (req, res, next) => {
+    if (req.user) {
+        return next();
+    }
+    res.redirect("/login");
+}
+// const sculpture_controlers= require('../controllers/sculptures');
+const sculpturesController = require('../controllers/Sculptures');
+router.get('/', sculpturesController.sculpture_view_all_Page);
+// GET request for one sculpture.
+router.get('/sculptures/:id', sculpturesController.sculpture_detail);
+// Import the sculpture controller (make sure the file path is correct)
+const sculpture_controller = require('../controllers/Sculptures');
+/* GET detail costume page */
+router.get('/detail', sculpturesController.sculpture_view_one_Page);
+// DELETE request to delete an sculpture by ID
+router.delete('/sculptures/:id', sculpture_controller.sculpture_delete);
+/* GET create costume page */
+router.get('/create', secured, sculpture_controller.sculpture_create_Page);
+/* GET update costume page */
+router.get('/update', secured, sculpture_controller.sculpture_update_Page);
+/* GET create update page */
+//router.get('/update', sculpture_controller.sculpture_update_Page);
+/* GET delete costume page */
+router.get('/delete', secured, sculpture_controller.sculpture_delete_Page)
 module.exports = router;

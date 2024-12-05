@@ -1,46 +1,52 @@
 extends layout
 
 block content
-  h1= title
-  form(id='sculptureForm', action=`/sculptures/${toShow._id}`, method='POST')
-    input(type='hidden', name='_method', value='PUT')
-    div.form-group
-      label(for='sculpture_name') Sculpture Name:
-      input#sculpture_name(type='text', name='sculpture_name', value=toShow.sculpture_name, required=true)
+    h1= title
+    - let sculptureid = toShow._id
+    - let sculpture_name = toShow.sculpture_name 
+    - let sculpture_material = toShow.sculpture_material 
+    - let sculpture_height = toShow.sculpture_height
 
-    div.form-group
-      label(for='sculpture_material') Material:
-      input#sculpture_material(type='text', name='sculpture_material', value=toShow.sculpture_material, required=true)
+    div.row(class='mb-2')
+        div.mr-1 ID is:
+        div #{sculptureid}
+    - let actionid = "/resource/sculptures/" + sculptureid
+    form(id='sculptureForm', action=actionid, method="PUT")
+        div.form-group
+            label(for='sculpture_name') sculpture name
+            input#sculpture_type(type='text', name='sculpture_name', value=sculpture_name)
 
-    div.form-group
-      label(for='sculpture_height') Height (in cm):
-      input#sculpture_height(type='number', name='sculpture_height', value=toShow.sculpture_height, min='1', required=true)
+        div.form-group
+            label(for='origin') Sculpture Material 
+            input#locaorigintion(type='text', name='sculpture_material', value=sculpture_material)
 
-    input.btn.btn-primary(type='submit', value='Update')
+        div.form-group
+            label(for='age') Sculpture Height 
+            input#age(type='number', name='sculpture_height', value=sculpture_height)
 
-block script
-  script.
-    document.forms['sculptureForm'].addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData.entries());
+        input(type="submit")
+    script.
+        document.forms['sculptureForm'].addEventListener('submit', (event) => {
+            event.preventDefault();
+             // Validate the age field
+            const ageInput = document.getElementById('age');
+            const ageValue = parseInt(ageInput.value, 10);
 
-      try {
-        const response = await fetch(event.target.action, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
+            if (isNaN(ageValue) || ageValue < 100) {
+                alert("The sculpture age must be at least 100.");
+                return; // Prevent form submission
+            }
+            // Show user that form is being submitted
+            fetch(event.target.action, {
+                method: 'PUT',
+                body: new URLSearchParams(new FormData(event.target)) // Form data
+            }).then((resp) => {
+                return resp.json(); // Expecting a JSON response
+            }).then((body) => {
+                alert("Update succeeded");
+                // Optionally handle response body
+            }).catch((error) => {
+                alert("Update failed " + error);
+                // Handle error
+            });
         });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(errorText || 'Unknown error occurred');
-        }
-
-        alert('Update succeeded');
-        window.location.href = "/"; // Redirect to homepage or appropriate page
-      } catch (error) {
-        console.error('Update failed:', error.message);
-        alert('Update failed: ' + error.message);
-      }
-    });

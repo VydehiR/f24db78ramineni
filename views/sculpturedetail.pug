@@ -1,18 +1,24 @@
+
 extends layout
 
 block content
   h1= title
-  .container
-    .row
-      .col-md-4.font-weight-bold Sculpture ID:
-      .col-md-8.text-info #{toShow._id}
-    .row
-      .col-md-4.font-weight-bold Sculpture Name:
-      .col-md-8.text-info #{toShow.sculpture_name}
-    .row
-      .col-md-4.font-weight-bold Material:
-      .col-md-8.text-info #{toShow.sculpture_material}
-    .row
-      .col-md-4.font-weight-bold Height:
-      .col-md-8.text-info #{toShow.sculpture_height} cm
-  a.btn.btn-primary.mt-4(href='/Sculptures') Back to List
+  - let sculptureid = toShow._id
+  - let sculpture_name = toShow.sculpture_name
+  - let sculpture_material = toShow.sculpture_material
+  - let sculpture_height= toShow.sculpture_height
+  div.container
+    div.row
+      div.col-md-4.font-weight-bold sculpture ID:
+      div.col-md-8.text-danger #{sculptureid}
+    div.row
+      div.col-md-4.font-weight-bold sculpture Name:
+      div.col-md-8.text-danger #{sculpture_name}
+    div.row
+      div.col-md-4.font-weight-bold Sculpture Material:
+      div.col-md-8.text-danger #{sculpture_material}
+    div.row
+      div.col-md-4.font-weight-bold Sculpture Height:
+      div.col-md-8.text-danger #{sculpture_height}
+
+  a.btn.btn-primary.mt-4(href='/sculptures') Back to List

@@ -1,12 +1,14 @@
+// routes/resource.js
 const express = require('express');
 const router = express.Router();
-const SculptureController = require('../controllers/Sculptures');
+const api_controller = require('../controllers/api');
+const sculpture_controller = require('../controllers/Sculptures');
 
-// API Routes
-router.get('/Sculptures', SculptureController.Sculpture_list); // List all sculptures
-router.post('/Sculptures', SculptureController.Sculpture_create_post); // Create new sculpture
-router.get('/Sculptures/:id', SculptureController.Sculpture_view_one_Page); // View one sculpture
-router.put('/Sculptures/:id', SculptureController.Sculpture_update_put); // Update sculpture
-router.delete('/Sculptures/:id', SculptureController.Sculpture_delete); // Delete sculpture
+router.get('/', api_controller.api);
+router.get('/sculptures', sculpture_controller.sculpture_list);
+router.post('/sculptures', sculpture_controller.sculpture_create_post);
+router.get('/sculptures/:id', sculpture_controller.sculpture_detail);
+router.put('/sculptures/:id', sculpture_controller.sculpture_update_put);
+router.delete('/sculptures/:id', sculpture_controller.sculpture_delete);
 
 module.exports = router;

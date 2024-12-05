@@ -1,22 +1,43 @@
+
 extends layout
 
 block content
   h1= title
-  div.container
-    div.row
-      div.col-md-4.font-weight-bold Sculpture ID:
-      div.col-md-8.text-info #{toShow._id}
-    div.row
-      div.col-md-4.font-weight-bold Sculpture Name:
-      div.col-md-8.text-info #{toShow.sculpture_name}
-    div.row
-      div.col-md-4.font-weight-bold Material:
-      div.col-md-8.text-info #{toShow.sculpture_material}
-    div.row
-      div.col-md-4.font-weight-bold Height:
-      div.col-md-8.text-info #{toShow.sculpture_height} cm
-
-  form(action=`/Sculptures/delete/${toShow._id}?_method=DELETE`, method='POST')
-    button.btn.btn-danger.mt-4(type='submit') Delete Sculpture
-
-  a.btn.btn-primary.mt-4(href='/Sculptures') Back to List
+  if (toShow == null)
+    h2 No instance to delete
+  else
+    - let sculptureid = toShow._id
+    - let sculpture_name = toShow.sculpture_name
+    - let sculpture_material = toShow.sculpture_material
+    - let sculpture_height = toShow.sculpture_height
+    - let actionid = "/resource/sculptures/" + sculptureid
+    script let actionid = "#{actionid}"
+    div
+      div.row
+        div(class='sculptureAttr mr-3') sculpture ID is: #{sculptureid}
+      div.row
+        div(class='sculptureAttr mr-3') sculpture Name is: #{sculpture_name}
+      div.row
+        div(class='sculptureAttr mr-3') Sculpture material is: #{sculpture_material}
+      div.row
+        div(class='sculptureAttr mr-3') Sculpture Height is: #{sculpture_height}
+    button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete
+    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
+  script.
+      function cancel() {
+        window.origin.href = '/sculptures';
+        }
+  script.
+    function deleteOnid() {
+      console.log("Starting delete");
+      fetch(actionid, {
+        method: 'DELETE'
+        }).then((resp) => {
+        return resp.json();
+        }).then((body) => {
+        alert("Delete succeeded");
+        window.origin.href = '/sculptures';
+        }).catch((error) => {
+        alert("Delete failed: " + error);
+      });
+    }
